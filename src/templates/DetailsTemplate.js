@@ -6,6 +6,7 @@ import UserPageTemplate from 'templates/UserPageTemplate';
 import Heading from 'components/atoms/Heading/Heading';
 import Paragraph from 'components/atoms/Paragraph/Paragraph';
 import Button from 'components/atoms/Button/Button';
+import withContext from 'hoc/withContext';
 
 const StyledWrapper = styled.div`
   padding: 70px;
@@ -47,29 +48,29 @@ const StyledLink = styled.a`
   text-transform: uppercase;
 `;
 
-const DetailsTemplate = ({ pageType, title, created, content, twitterName, articleUrl }) => (
+const DetailsTemplate = ({ pageContext, title, created, content, twitterName, articleUrl }) => (
   <>
-    <UserPageTemplate pageType={pageType}>
+    <UserPageTemplate>
       <StyledWrapper>
         <StyledHeadingWrapper>
           <StyledHeader big>{title}</StyledHeader>
           <StyledDateInfo>CREATED - {created}</StyledDateInfo>
-          {pageType === 'twitters' && (
+          {pageContext === 'twitters' && (
             <StyledAvatar src={`https://unavatar.now.sh/twitter/${twitterName}`}></StyledAvatar>
           )}
         </StyledHeadingWrapper>
         <StyledContent>{content}</StyledContent>
-        {pageType === 'twitters' && (
+        {pageContext === 'twitters' && (
           <StyledLink href={`https://twitter.com/${twitterName}`} target="_blank">
             Open this twitter
           </StyledLink>
         )}
-        {pageType === 'articles' && (
+        {pageContext === 'articles' && (
           <StyledLink href={articleUrl} target="_blank">
             Open this article
           </StyledLink>
         )}
-        <Button pageType={pageType}>Close/Save</Button>
+        <Button>Close/Save</Button>
         <Paragraph>remove note</Paragraph>
       </StyledWrapper>
     </UserPageTemplate>
@@ -77,7 +78,7 @@ const DetailsTemplate = ({ pageType, title, created, content, twitterName, artic
 );
 
 DetailsTemplate.propTypes = {
-  pageType: PropTypes.oneOf(['notes', 'twitters', 'articles']),
+  pageContext: PropTypes.oneOf(['notes', 'twitters', 'articles']),
   title: PropTypes.string.isRequired,
   created: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
@@ -91,4 +92,4 @@ DetailsTemplate.defaultProps = {
   articleUrl: null,
 };
 
-export default DetailsTemplate;
+export default withContext(DetailsTemplate);

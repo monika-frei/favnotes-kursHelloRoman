@@ -7,8 +7,8 @@ import Paragraph from 'components/atoms/Paragraph/Paragraph.js';
 import Heading from 'components/atoms/Heading/Heading.js';
 import Button from 'components/atoms/Button/Button.js';
 import linkIcon from 'assets/icons/chain.svg';
-import { routes } from 'routes';
 import { removeItem as removeItemAction } from 'actions/index';
+import withContext from 'hoc/withContext';
 
 const StyledWrapper = styled.div`
   min-height: 380px;
@@ -110,12 +110,14 @@ class Card extends Component {
 }
 
 Card.propTypes = {
+  id: PropTypes.number.isRequired,
   pageType: PropTypes.oneOf(['notes', 'twitters', 'articles']),
   title: PropTypes.string.isRequired,
   created: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
   twitterName: PropTypes.string,
   articleUrl: PropTypes.string,
+  removeItem: PropTypes.func.isRequired,
 };
 
 Card.defaultProps = {
@@ -134,4 +136,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Card);
+export default connect(mapStateToProps, mapDispatchToProps)(withContext(Card));
