@@ -6,6 +6,9 @@ import Heading from 'components/atoms/Heading/Heading';
 import Paragraph from 'components/atoms/Paragraph/Paragraph';
 import Button from 'components/atoms/Button/Button';
 import withContext from 'hoc/withContext';
+import { Link } from 'react-router-dom';
+import { removeItem as removeItemAction } from 'actions';
+import { connect } from 'react-redux';
 
 const StyledWrapper = styled.div`
   padding: 70px 70px 70px 180px;
@@ -39,35 +42,70 @@ const StyledLink = styled.a`
   display: block;
   margin-bottom: 50px;
   text-transform: uppercase;
+  color: black;
 `;
 
-const DetailsTemplate = ({ pageContext, title, content, twitterName, articleUrl }) => (
-  <>
-    <UserPageTemplate>
-      <StyledWrapper>
-        <StyledHeadingWrapper>
-          <StyledHeader big>{title}</StyledHeader>
+const StyledParagraph = styled(Paragraph)`
+  display: block;
+  margin-top: 20px;
+  color: black;
+`;
+
+const DetailsTemplate = ({
+  pageContext,
+  title,
+  content,
+  twitterName,
+  articleUrl,
+  removeItem,
+  id,
+}) => {
+  return (
+    <>
+      <UserPageTemplate>
+        <StyledWrapper>
+          <StyledHeadingWrapper>
+            <StyledHeader big>{title}</StyledHeader>
+            {pageContext === 'twitters' && (
+              <StyledAvatar src={`https://unavatar.now.sh/twitter/${twitterName}`}></StyledAvatar>
+            )}
+          </StyledHeadingWrapper>
+          <StyledContent>{content}</StyledContent>
           {pageContext === 'twitters' && (
-            <StyledAvatar src={`https://unavatar.now.sh/twitter/${twitterName}`}></StyledAvatar>
+            <StyledLink href={`https://twitter.com/${twitterName}`} target="_blank">
+              Open this twitter
+            </StyledLink>
           )}
-        </StyledHeadingWrapper>
-        <StyledContent>{content}</StyledContent>
-        {pageContext === 'twitters' && (
-          <StyledLink href={`https://twitter.com/${twitterName}`} target="_blank">
-            Open this twitter
-          </StyledLink>
-        )}
-        {pageContext === 'articles' && (
-          <StyledLink href={articleUrl} target="_blank">
-            Open this article
-          </StyledLink>
-        )}
-        <Button>Close/Save</Button>
-        <Paragraph>remove note</Paragraph>
-      </StyledWrapper>
-    </UserPageTemplate>
-  </>
-);
+          {pageContext === 'articles' && (
+            <StyledLink href={articleUrl} target="_blank">
+              Open this article
+            </StyledLink>
+          )}
+          <Button as={Link} to={`/${pageContext}`}>
+            Close
+          </Button>
+          <StyledParagraph
+            as={Link}
+            to={`/${pageContext}`}
+            onClick={() => removeItem(pageContext, id)}
+          >
+            remove note
+          </StyledParagraph>
+        </StyledWrapper>
+      </UserPageTemplate>
+    </>
+  );
+};
+
+const mapStateToProps = (state) => {
+  return state;
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    removeItem: (itemType, id) => dispatch(removeItemAction(itemType, id)),
+  };
+};
 
 DetailsTemplate.propTypes = {
   pageContext: PropTypes.oneOf(['notes', 'twitters', 'articles']),
@@ -83,4 +121,4 @@ DetailsTemplate.defaultProps = {
   articleUrl: null,
 };
 
-export default withContext(DetailsTemplate);
+export default connect(mapStateToProps, mapDispatchToProps)(withContext(DetailsTemplate));

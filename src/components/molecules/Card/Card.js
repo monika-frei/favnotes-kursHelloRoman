@@ -46,6 +46,7 @@ const StyledAvatar = styled.img`
   top: 25px;
   right: 25px;
   z-index: 1;
+  cursor: pointer;
 `;
 
 const StyledLink = styled.a`
@@ -57,7 +58,7 @@ const StyledLink = styled.a`
   background-size: 60%;
   background-position: 50%;
   position: absolute;
-  top: 25px;
+  top: 20%;
   right: 25px;
 `;
 
@@ -83,7 +84,7 @@ class Card extends Component {
           <StyledHeading>{title}</StyledHeading>
         </InnerWrapper>
         <InnerWrapper flex>
-          <Paragraph>{content}</Paragraph>
+          <Paragraph onClick={this.handleCardClick}>{content}</Paragraph>
           <Button secondary onClick={() => removeItem(pageType, id)}>
             REMOVE
           </Button>

@@ -2,6 +2,11 @@ import styled, { css } from 'styled-components';
 import withContext from 'hoc/withContext';
 
 const Button = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  text-decoration: none;
   background-color: ${({ theme, pageContext }) => (pageContext ? theme[pageContext] : theme.notes)};
   height: 47px;
   width: 220px;
@@ -11,6 +16,7 @@ const Button = styled.button`
   font-weight: ${({ theme }) => theme.bold};
   font-size: 16px;
   text-transform: uppercase;
+  cursor: pointer;
 
   ${({ secondary }) =>
     secondary &&

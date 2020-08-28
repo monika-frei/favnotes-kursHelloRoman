@@ -32,23 +32,8 @@ const AuthTemplate = ({ children }) => (
   <StyledWrapper>
     <StyledLogo icon={logo}></StyledLogo>
     <StyledHeading>Your new favorite online notes experience</StyledHeading>
-
     {children}
   </StyledWrapper>
 );
 
 export default AuthTemplate;
-
-//dodatkowy pasek z ikonami
-// const StyledIconsWrapper = styled.div`
-//   margin: 10px;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-// `;
-
-/* <StyledIconsWrapper>
-      <ButtonIcon icon={notesIcon}></ButtonIcon>
-      <ButtonIcon icon={twitterIcon}></ButtonIcon>
-      <ButtonIcon icon={articleIcon}></ButtonIcon>
-    </StyledIconsWrapper> */
