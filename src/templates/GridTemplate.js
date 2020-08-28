@@ -10,6 +10,7 @@ import ButtonIcon from 'components/atoms/ButtonIcon/ButtonIcon';
 import plusIcon from 'assets/icons/plus.svg';
 import closeIcon from 'assets/icons/close.svg';
 import NewItemBar from 'components/organisms/NewItemBar/NewItemBar';
+import { connect } from 'react-redux';
 
 const StyledWrapper = styled.div`
   position: relative;
@@ -20,7 +21,7 @@ const StyledWrapper = styled.div`
 const StyledGridWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-gap: 70px;
+  grid-gap: 40px;
   padding: 25px 70px 25px 70px;
 `;
 
@@ -58,18 +59,23 @@ class GridTemplate extends Component {
   };
 
   render() {
-    const { children, pageContext } = this.props;
+    const { children, pageContext, items } = this.props;
     const { activeNewItemBar } = this.state;
+
+    let numberOfItems = 0;
+
+    if (items) {
+      numberOfItems = items.length;
+    }
 
     return (
       <UserPageTemplate>
         <StyledWrapper>
           <StyledPageHeader>
-            <Input search placeholder="search" />
             <StyledHeding big as="h1">
               {pageContext}
             </StyledHeding>
-            <StyledParagraph>6 {pageContext}</StyledParagraph>
+            <StyledParagraph>{`${numberOfItems} ${pageContext}`}</StyledParagraph>
           </StyledPageHeader>
           <StyledGridWrapper>{children}</StyledGridWrapper>
           <StyledButtonIcon
@@ -84,6 +90,12 @@ class GridTemplate extends Component {
   }
 }
 
+const mapStateToProps = (state, ownProps) => {
+  return {
+    items: state[ownProps.pageContext],
+  };
+};
+
 GridTemplate.propTypes = {
   children: PropTypes.arrayOf(PropTypes.object).isRequired,
   pageContext: PropTypes.oneOf(['notes', 'articles', 'twitters']),
@@ -93,4 +105,4 @@ GridTemplate.defaultProps = {
   pageContext: 'notes',
 };
 
-export default withContext(GridTemplate);
+export default withContext(connect(mapStateToProps)(GridTemplate));

@@ -1,5 +1,4 @@
 const initialState = {
-  userID: '5f476a4d69c80f34580c5301',
   twitters: [],
   notes: [],
   articles: [],
@@ -10,14 +9,14 @@ const rootReducer = (state = initialState, action) => {
     case 'AUTHENTICATE_SUCCESS':
       return {
         ...state,
-        userId: action.payload.data._id,
+        userID: action.payload.data._id,
         status: action.payload.status,
       };
     case 'LOGOUT_SUCCESS':
       return {
         ...state,
         logout: action.payload,
-        userId: undefined,
+        userID: undefined,
         status: undefined,
       };
     case 'FETCH_SUCCESS':

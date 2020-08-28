@@ -78,9 +78,13 @@ const NewItemBar = ({ pageContext, isVisible, addItem, handleClose }) => (
 
         if (!values.title) {
           errors.title = 'Please fill in the title';
+        } else if (values.title.length > 16) {
+          errors.title = 'Title must be 15 characters or less';
         }
         if (!values.content) {
           errors.content = 'Please fill in the description';
+        } else if (values.content.length > 151) {
+          errors.title = 'Title must be 150 characters or less';
         }
         if (pageContext === 'articles') {
           if (!values.articleUrl) {

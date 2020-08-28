@@ -3,6 +3,7 @@ import DetailsTemplate from 'templates/DetailsTemplate';
 import { connect } from 'react-redux';
 import withContext from 'hoc/withContext';
 import axios from 'axios';
+import { Redirect } from 'react-router-dom';
 
 class DetailsPage extends Component {
   state = {
@@ -13,6 +14,7 @@ class DetailsPage extends Component {
       twitterName: '',
     },
   };
+
   componentDidMount() {
     if (this.props.activeItem.length > 0) {
       const [activeItem] = this.props.activeItem;
@@ -31,6 +33,7 @@ class DetailsPage extends Component {
   render() {
     const { activeItem } = this.state;
     const { pageContext } = this.props;
+    const { id } = this.props.match.params;
     return (
       <DetailsTemplate
         pageType={pageContext}
@@ -38,6 +41,7 @@ class DetailsPage extends Component {
         content={activeItem.content}
         twitterName={activeItem.twitterName}
         articleUrl={activeItem.articleUrl}
+        id={id}
       ></DetailsTemplate>
     );
   }
