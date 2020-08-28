@@ -7,8 +7,8 @@ import Paragraph from 'components/atoms/Paragraph/Paragraph.js';
 import Heading from 'components/atoms/Heading/Heading.js';
 import Button from 'components/atoms/Button/Button.js';
 import linkIcon from 'assets/icons/chain.svg';
-import { routes } from 'routes';
 import { removeItem as removeItemAction } from 'actions/index';
+import withContext from 'hoc/withContext';
 
 const StyledWrapper = styled.div`
   min-height: 380px;
@@ -33,12 +33,6 @@ const InnerWrapper = styled.div`
     `}
 `;
 
-const DateInfo = styled(Paragraph)`
-  margin: 0 0 5px;
-  font-weight: ${({ theme }) => theme.bold};
-  font-size: ${({ theme }) => theme.fontSize.xs};
-`;
-
 const StyledHeading = styled(Heading)`
   margin: 5px 0 0;
 `;
@@ -52,6 +46,7 @@ const StyledAvatar = styled.img`
   top: 25px;
   right: 25px;
   z-index: 1;
+  cursor: pointer;
 `;
 
 const StyledLink = styled.a`
@@ -63,7 +58,7 @@ const StyledLink = styled.a`
   background-size: 60%;
   background-position: 50%;
   position: absolute;
-  top: 25px;
+  top: 20%;
   right: 25px;
 `;
 
@@ -75,31 +70,21 @@ class Card extends Component {
   handleCardClick = () => this.setState({ redirect: true });
 
   render() {
-    const {
-      id,
-      pageType,
-      title,
-      created,
-      content,
-      articleUrl,
-      twitterName,
-      removeItem,
-    } = this.props;
+    const { id, pageType, title, content, articleUrl, twitterName, removeItem } = this.props;
     if (this.state.redirect) {
       return <Redirect to={`${pageType}/${id}`} />;
     }
     return (
-      <StyledWrapper onClick={this.handleCardClick}>
-        <InnerWrapper activeColor={pageType}>
+      <StyledWrapper>
+        <InnerWrapper activeColor={pageType} onClick={this.handleCardClick}>
           {pageType === 'twitters' && (
             <StyledAvatar src={`https://unavatar.now.sh/twitter/${twitterName}`}></StyledAvatar>
           )}
           {pageType === 'articles' && <StyledLink href={articleUrl}></StyledLink>}
           <StyledHeading>{title}</StyledHeading>
-          <DateInfo>{created}</DateInfo>
         </InnerWrapper>
         <InnerWrapper flex>
-          <Paragraph>{content}</Paragraph>
+          <Paragraph onClick={this.handleCardClick}>{content}</Paragraph>
           <Button secondary onClick={() => removeItem(pageType, id)}>
             REMOVE
           </Button>
@@ -110,12 +95,13 @@ class Card extends Component {
 }
 
 Card.propTypes = {
+  id: PropTypes.number.isRequired,
   pageType: PropTypes.oneOf(['notes', 'twitters', 'articles']),
   title: PropTypes.string.isRequired,
-  created: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
   twitterName: PropTypes.string,
   articleUrl: PropTypes.string,
+  removeItem: PropTypes.func.isRequired,
 };
 
 Card.defaultProps = {
@@ -134,4 +120,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Card);
+export default connect(mapStateToProps, mapDispatchToProps)(withContext(Card));

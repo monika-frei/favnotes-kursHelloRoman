@@ -1,7 +1,13 @@
 import styled, { css } from 'styled-components';
+import withContext from 'hoc/withContext';
 
 const Button = styled.button`
-  background-color: ${({ theme, pageType }) => (pageType ? theme[pageType] : theme.notes)};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  text-decoration: none;
+  background-color: ${({ theme, pageContext }) => (pageContext ? theme[pageContext] : theme.notes)};
   height: 47px;
   width: 220px;
   border: none;
@@ -10,6 +16,7 @@ const Button = styled.button`
   font-weight: ${({ theme }) => theme.bold};
   font-size: 16px;
   text-transform: uppercase;
+  cursor: pointer;
 
   ${({ secondary }) =>
     secondary &&
@@ -21,4 +28,4 @@ const Button = styled.button`
     `}
 `;
 
-export default Button;
+export default withContext(Button);

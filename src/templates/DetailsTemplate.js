@@ -1,14 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import UserPageTemplate from 'templates/UserPageTemplate';
 import Heading from 'components/atoms/Heading/Heading';
 import Paragraph from 'components/atoms/Paragraph/Paragraph';
 import Button from 'components/atoms/Button/Button';
+import withContext from 'hoc/withContext';
+import { Link } from 'react-router-dom';
+import { removeItem as removeItemAction } from 'actions';
+import { connect } from 'react-redux';
 
 const StyledWrapper = styled.div`
-  padding: 70px;
+  padding: 70px 70px 70px 180px;
   width: 50vw;
 `;
 
@@ -20,19 +23,13 @@ const StyledHeader = styled(Heading)`
   margin: 0;
 `;
 
-const StyledDateInfo = styled(Paragraph)`
-  font-weight: ${({ theme }) => theme.bold};
-  margin-top: 0;
-  text-transform: uppercase;
-`;
-
 const StyledAvatar = styled.img`
   width: 100px;
   height: 100px;
   border-radius: 50%;
   position: absolute;
   top: 0px;
-  right: 50px;
+  right: 10px;
   z-index: 1;
 `;
 
@@ -45,41 +42,74 @@ const StyledLink = styled.a`
   display: block;
   margin-bottom: 50px;
   text-transform: uppercase;
+  color: black;
 `;
 
-const DetailsTemplate = ({ pageType, title, created, content, twitterName, articleUrl }) => (
-  <>
-    <UserPageTemplate pageType={pageType}>
-      <StyledWrapper>
-        <StyledHeadingWrapper>
-          <StyledHeader big>{title}</StyledHeader>
-          <StyledDateInfo>CREATED - {created}</StyledDateInfo>
-          {pageType === 'twitters' && (
-            <StyledAvatar src={`https://unavatar.now.sh/twitter/${twitterName}`}></StyledAvatar>
+const StyledParagraph = styled(Paragraph)`
+  display: block;
+  margin-top: 20px;
+  color: black;
+`;
+
+const DetailsTemplate = ({
+  pageContext,
+  title,
+  content,
+  twitterName,
+  articleUrl,
+  removeItem,
+  id,
+}) => {
+  return (
+    <>
+      <UserPageTemplate>
+        <StyledWrapper>
+          <StyledHeadingWrapper>
+            <StyledHeader big>{title}</StyledHeader>
+            {pageContext === 'twitters' && (
+              <StyledAvatar src={`https://unavatar.now.sh/twitter/${twitterName}`}></StyledAvatar>
+            )}
+          </StyledHeadingWrapper>
+          <StyledContent>{content}</StyledContent>
+          {pageContext === 'twitters' && (
+            <StyledLink href={`https://twitter.com/${twitterName}`} target="_blank">
+              Open this twitter
+            </StyledLink>
           )}
-        </StyledHeadingWrapper>
-        <StyledContent>{content}</StyledContent>
-        {pageType === 'twitters' && (
-          <StyledLink href={`https://twitter.com/${twitterName}`} target="_blank">
-            Open this twitter
-          </StyledLink>
-        )}
-        {pageType === 'articles' && (
-          <StyledLink href={articleUrl} target="_blank">
-            Open this article
-          </StyledLink>
-        )}
-        <Button pageType={pageType}>Close/Save</Button>
-        <Paragraph>remove note</Paragraph>
-      </StyledWrapper>
-    </UserPageTemplate>
-  </>
-);
+          {pageContext === 'articles' && (
+            <StyledLink href={articleUrl} target="_blank">
+              Open this article
+            </StyledLink>
+          )}
+          <Button as={Link} to={`/${pageContext}`}>
+            Close
+          </Button>
+          <StyledParagraph
+            as={Link}
+            to={`/${pageContext}`}
+            onClick={() => removeItem(pageContext, id)}
+          >
+            remove note
+          </StyledParagraph>
+        </StyledWrapper>
+      </UserPageTemplate>
+    </>
+  );
+};
+
+const mapStateToProps = (state) => {
+  return state;
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    removeItem: (itemType, id) => dispatch(removeItemAction(itemType, id)),
+  };
+};
 
 DetailsTemplate.propTypes = {
-  pageType: PropTypes.oneOf(['notes', 'twitters', 'articles']),
+  pageContext: PropTypes.oneOf(['notes', 'twitters', 'articles']),
   title: PropTypes.string.isRequired,
-  created: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
   twitterName: PropTypes.string,
   articleUrl: PropTypes.string,
@@ -91,4 +121,4 @@ DetailsTemplate.defaultProps = {
   articleUrl: null,
 };
 
-export default DetailsTemplate;
+export default connect(mapStateToProps, mapDispatchToProps)(withContext(DetailsTemplate));

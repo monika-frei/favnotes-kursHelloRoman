@@ -1,46 +1,62 @@
 import React, { Component } from 'react';
 import DetailsTemplate from 'templates/DetailsTemplate';
-import { routes } from 'routes';
+import { connect } from 'react-redux';
+import withContext from 'hoc/withContext';
+import axios from 'axios';
+import { Redirect } from 'react-router-dom';
 
 class DetailsPage extends Component {
   state = {
-    pageType: 'notes',
+    activeItem: {
+      title: '',
+      content: '',
+      articleUrl: '',
+      twitterName: '',
+    },
   };
 
   componentDidMount() {
-    switch (this.props.match.path) {
-      case routes.article:
-        this.setState({ pageType: 'articles' });
-        break;
-      case routes.twitter:
-        this.setState({ pageType: 'twitters' });
-        break;
-      case routes.note:
-        this.setState({ pageType: 'notes' });
-        break;
+    if (this.props.activeItem.length > 0) {
+      const [activeItem] = this.props.activeItem;
+      this.setState({
+        activeItem,
+      });
+    } else {
+      const { id } = this.props.match.params;
+      axios
+        .get(`http://localhost:9000/api/note/${id}`)
+        .then(({ data }) => this.setState({ activeItem: data }))
+        .catch((err) => console.log(err));
     }
   }
 
   render() {
-    const templateNote = {
-      title: 'Note in details',
-      created: '23/02/2020',
-      content:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent nisi risus, mollis pretium massa a, varius placerat tortor. Donec facilisis sagittis ex, vitae pulvinar mauris eleifend non. Praesent ipsum sem, fermentum ac placerat at, varius ut odio. Nulla a semper tortor, volutpat pretium est. Nam nec dolor a augue malesuada mattis. ',
-      twitterName: 'hello_roman',
-      articleUrl: 'https://medium.com/',
-    };
+    const { activeItem } = this.state;
+    const { pageContext } = this.props;
+    const { id } = this.props.match.params;
     return (
       <DetailsTemplate
-        pageType={this.state.pageType}
-        title={templateNote.title}
-        created={templateNote.created}
-        content={templateNote.content}
-        twitterName={templateNote.twitterName}
-        articleUrl={templateNote.articleUrl}
+        pageType={pageContext}
+        title={activeItem.title}
+        content={activeItem.content}
+        twitterName={activeItem.twitterName}
+        articleUrl={activeItem.articleUrl}
+        id={id}
       ></DetailsTemplate>
     );
   }
 }
 
-export default DetailsPage;
+const mapStateToProps = (state, ownProps) => {
+  if (state[ownProps.pageContext]) {
+    return {
+      activeItem: state[ownProps.pageContext].filter(
+        (activeItem) => activeItem._id === ownProps.match.params.id,
+      ),
+    };
+  } else {
+    return null;
+  }
+};
+
+export default withContext(connect(mapStateToProps)(DetailsPage));
