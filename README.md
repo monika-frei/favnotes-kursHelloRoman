@@ -16,6 +16,9 @@ Project is created with:
 * Backend(provided with the course): Node.js and MongoDB
 
 ## Setup
+
+* 'npm start' - to start server
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 In the project directory, you can run:
