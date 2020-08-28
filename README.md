@@ -17,7 +17,7 @@ Project is created with:
 
 ## Setup
 
-* 'npm start' - to start server
+* 'npm start' - to start server in backend folder
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
