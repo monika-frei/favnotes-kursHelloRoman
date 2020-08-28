@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PageContext from 'context';
 
 const withContext = (Component) => {

@@ -13,7 +13,8 @@ import NewItemBar from 'components/organisms/NewItemBar/NewItemBar';
 
 const StyledWrapper = styled.div`
   position: relative;
-  padding-right: 80px;
+  padding-right: 70px;
+  margin-left: 150px;
 `;
 
 const StyledGridWrapper = styled.div`

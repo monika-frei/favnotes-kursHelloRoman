@@ -33,12 +33,6 @@ const InnerWrapper = styled.div`
     `}
 `;
 
-const DateInfo = styled(Paragraph)`
-  margin: 0 0 5px;
-  font-weight: ${({ theme }) => theme.bold};
-  font-size: ${({ theme }) => theme.fontSize.xs};
-`;
-
 const StyledHeading = styled(Heading)`
   margin: 5px 0 0;
 `;
@@ -75,28 +69,18 @@ class Card extends Component {
   handleCardClick = () => this.setState({ redirect: true });
 
   render() {
-    const {
-      id,
-      pageType,
-      title,
-      created,
-      content,
-      articleUrl,
-      twitterName,
-      removeItem,
-    } = this.props;
+    const { id, pageType, title, content, articleUrl, twitterName, removeItem } = this.props;
     if (this.state.redirect) {
       return <Redirect to={`${pageType}/${id}`} />;
     }
     return (
-      <StyledWrapper onClick={this.handleCardClick}>
-        <InnerWrapper activeColor={pageType}>
+      <StyledWrapper>
+        <InnerWrapper activeColor={pageType} onClick={this.handleCardClick}>
           {pageType === 'twitters' && (
             <StyledAvatar src={`https://unavatar.now.sh/twitter/${twitterName}`}></StyledAvatar>
           )}
           {pageType === 'articles' && <StyledLink href={articleUrl}></StyledLink>}
           <StyledHeading>{title}</StyledHeading>
-          <DateInfo>{created}</DateInfo>
         </InnerWrapper>
         <InnerWrapper flex>
           <Paragraph>{content}</Paragraph>
@@ -113,7 +97,6 @@ Card.propTypes = {
   id: PropTypes.number.isRequired,
   pageType: PropTypes.oneOf(['notes', 'twitters', 'articles']),
   title: PropTypes.string.isRequired,
-  created: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
   twitterName: PropTypes.string,
   articleUrl: PropTypes.string,
