@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import UserPageTemplate from 'templates/UserPageTemplate';
 import Heading from 'components/atoms/Heading/Heading';
@@ -9,7 +8,7 @@ import Button from 'components/atoms/Button/Button';
 import withContext from 'hoc/withContext';
 
 const StyledWrapper = styled.div`
-  padding: 70px;
+  padding: 70px 70px 70px 180px;
   width: 50vw;
 `;
 
@@ -21,19 +20,13 @@ const StyledHeader = styled(Heading)`
   margin: 0;
 `;
 
-const StyledDateInfo = styled(Paragraph)`
-  font-weight: ${({ theme }) => theme.bold};
-  margin-top: 0;
-  text-transform: uppercase;
-`;
-
 const StyledAvatar = styled.img`
   width: 100px;
   height: 100px;
   border-radius: 50%;
   position: absolute;
   top: 0px;
-  right: 50px;
+  right: 10px;
   z-index: 1;
 `;
 
@@ -48,13 +41,12 @@ const StyledLink = styled.a`
   text-transform: uppercase;
 `;
 
-const DetailsTemplate = ({ pageContext, title, created, content, twitterName, articleUrl }) => (
+const DetailsTemplate = ({ pageContext, title, content, twitterName, articleUrl }) => (
   <>
     <UserPageTemplate>
       <StyledWrapper>
         <StyledHeadingWrapper>
           <StyledHeader big>{title}</StyledHeader>
-          <StyledDateInfo>CREATED - {created}</StyledDateInfo>
           {pageContext === 'twitters' && (
             <StyledAvatar src={`https://unavatar.now.sh/twitter/${twitterName}`}></StyledAvatar>
           )}
@@ -80,7 +72,6 @@ const DetailsTemplate = ({ pageContext, title, created, content, twitterName, ar
 DetailsTemplate.propTypes = {
   pageContext: PropTypes.oneOf(['notes', 'twitters', 'articles']),
   title: PropTypes.string.isRequired,
-  created: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
   twitterName: PropTypes.string,
   articleUrl: PropTypes.string,

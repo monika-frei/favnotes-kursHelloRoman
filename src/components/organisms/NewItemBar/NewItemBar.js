@@ -8,7 +8,7 @@ import { theme } from 'theme/mainTheme';
 import withContext from 'hoc/withContext';
 import { connect } from 'react-redux';
 import { addItem as addItemAction } from 'actions';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, ErrorMessage } from 'formik';
 
 const StyledWrapper = styled.div`
   position: fixed;
@@ -64,10 +64,14 @@ const NewItemBar = ({ pageContext, isVisible, addItem, handleClose }) => (
       {pageContext === 'articles' && 'An article requires title, description and a link'}
     </StyledParagraph>
     <Formik
-      initialValues={{ title: '', content: '', articleUrl: '', twitterName: '', created: '' }}
+      initialValues={{ title: '', content: '', articleUrl: '', twitterName: '' }}
       onSubmit={(values) => {
         addItem(pageContext, values);
         handleClose();
+        values.title = '';
+        values.content = '';
+        values.articleUrl = '';
+        values.twitterName = '';
       }}
       validate={(values) => {
         const errors = {};
@@ -92,7 +96,7 @@ const NewItemBar = ({ pageContext, isVisible, addItem, handleClose }) => (
         return errors;
       }}
     >
-      {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
+      {({ values, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
         <Form>
           <Input
             type="text"
