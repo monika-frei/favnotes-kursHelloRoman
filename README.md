@@ -11,7 +11,6 @@ and tools like Storybook. Also to learn how to write better code with good pract
 
 Project is created with:
 * React(Redux, Router)
-* API
 * styled componenets
 * Backend(provided with the course): Node.js and MongoDB
 
